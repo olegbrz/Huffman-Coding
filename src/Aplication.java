@@ -1,6 +1,6 @@
 import java.awt.EventQueue;
 
-public class Aplicacion {
+public class Aplication {
 
 
 	public static void main(String[] args) {
@@ -8,7 +8,7 @@ public class Aplicacion {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				@SuppressWarnings("unused")
-				VentanaHuffman miVentana = new VentanaHuffman();
+				WindowHuffman newWindow = new WindowHuffman();
 			}
 		});
 

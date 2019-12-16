@@ -17,9 +17,9 @@ public class Huffman extends HuffmanAbstract {
 		HuffmanAbstract h = new Huffman();
 		String text = "j'aime aller sur le bord de l'eau les jeudis ou les jours impairs";
 		InputStream is = new ByteArrayInputStream(text.getBytes("UTF-8"));
-		h.readOrigen(is);
-		h.imprimirArbol(h.raizArbol,"");
-		h.imprimirListaCodigos();
+		h.readOrigin(is);
+		h.printTree(h.treeRoot,"");
+		h.printCodeList();
 	}
 
 

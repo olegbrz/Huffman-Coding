@@ -5,244 +5,244 @@ import java.io.InputStream;
 
 public abstract class HuffmanAbstract {
 
-	protected Nodo primero;
-	protected Nodo raizArbol;
-	protected byte tabla[];
-	protected String listaCodigos[];
-	protected int tamano;
-	protected int cont;
+	protected Node first;
+	protected Node treeRoot;
+	protected byte table[];
+	protected String codeList[];
+	protected int size;
+	protected int iter;
 
 	public HuffmanAbstract() {
-		primero = null;
-		tamano = cont = 0;
+		first = null;
+		size = iter = 0;
 	}
 
-	public int readOrigen(InputStream lector) throws IOException, FileNotFoundException {
-		int byteLeido;
+	public int readOrigin(InputStream reader) throws IOException, FileNotFoundException {
+		int readByte;
 		int numBytes = 0;
-		if (lector != null) {
-			int tabla[] = new int[256];
+		if (reader != null) {
+			int table[] = new int[256];
 			do {
-				byteLeido = lector.read();
-				if (byteLeido != -1) {
-					tabla[byteLeido]++;
+				readByte = reader.read();
+				if (readByte != -1) {
+					table[readByte]++;
 					numBytes++;
 				}
-			} while (byteLeido != -1);
-			generarHuffman(tabla);
+			} while (readByte != -1);
+			generateHuffman(table);
 		}
 		return numBytes;
 	}
 
-	public void agregarElemento(Nodo miNodo) {
-		if (primero == null) {
-			primero = miNodo;
+	public void addElement(Node newNode) {
+		if (first == null) {
+			first = newNode;
 		} else {
-			Nodo aux = primero;
-			while (aux.getDerecha() != null)
-				aux = aux.getDerecha();
-			aux.setDerecha(miNodo);
-			miNodo.setIzquierda(aux);
+			Node aux = first;
+			while (aux.getRight() != null)
+				aux = aux.getRight();
+			aux.setRight(newNode);
+			newNode.setLeft(aux);
 		}
-		tamano++;
+		size++;
 	}
 
 
-	public void ordenar() {
+	public void sort() {
 		
-		Nodo aux1 = primero;
-		Nodo aux2 = aux1;
+		Node aux1 = first;
+		Node aux2 = aux1;
 		
-		int tempFrec;
-		char tempLetra;
-		boolean tempIsHoja;
-		Nodo tempHijIzq;
-		Nodo tempHijDer;
+		int tempFreq;
+		char tempChar;
+		boolean tempIsLeaf;
+		Node tempLeftChild;
+		Node tempRightChild;
 
 		while (aux1 != null) {
 
-			while (aux2.getDerecha() != null) {
-				if (aux2.getFrecuencia() > aux2.getDerecha().getFrecuencia()) {
+			while (aux2.getRight() != null) {
+				if (aux2.getFrequency() > aux2.getRight().getFrequency()) {
 					
-					tempFrec = aux2.getFrecuencia();
-					tempLetra = aux2.getLetra();
-					tempIsHoja = aux2.isHoja();
-					tempHijIzq = aux2.getHijoIzq();
-					tempHijDer = aux2.getHijoDer();
+					tempFreq = aux2.getFrequency();
+					tempChar = aux2.getCharacter();
+					tempIsLeaf = aux2.isLeaf();
+					tempLeftChild = aux2.getLeftChild();
+					tempRightChild = aux2.getRightChild();
 					
-					aux2.setFrecuencia(aux2.getDerecha().getFrecuencia());
-					aux2.setLetra(aux2.getDerecha().getLetra());
-					aux2.setTipo(aux2.getDerecha().isHoja());
-					aux2.setHijoIzq(aux2.getDerecha().getHijoIzq());
-					aux2.setHijoDer(aux2.getDerecha().getHijoDer());
+					aux2.setFrequency(aux2.getRight().getFrequency());
+					aux2.setCharacter(aux2.getRight().getCharacter());
+					aux2.setType(aux2.getRight().isLeaf());
+					aux2.setLeftChild(aux2.getRight().getLeftChild());
+					aux2.setRightChild(aux2.getRight().getRightChild());
 					
-					aux2.getDerecha().setFrecuencia(tempFrec);
-					aux2.getDerecha().setLetra(tempLetra);
-					aux2.getDerecha().setTipo(tempIsHoja);
-					aux2.getDerecha().setHijoIzq(tempHijIzq);
-					aux2.getDerecha().setHijoDer(tempHijDer);
+					aux2.getRight().setFrequency(tempFreq);
+					aux2.getRight().setCharacter(tempChar);
+					aux2.getRight().setType(tempIsLeaf);
+					aux2.getRight().setLeftChild(tempLeftChild);
+					aux2.getRight().setRightChild(tempRightChild);
 				}
 				
-				aux2 = aux2.getDerecha();
+				aux2 = aux2.getRight();
 			}
-			aux2 = primero;
-			aux1 = aux1.getDerecha();
+			aux2 = first;
+			aux1 = aux1.getRight();
 		}
 	}
 
-	public void generarArbol() {
-		while (this.primero.getDerecha() != null) {
-			Nodo firstNode = this.primero;
-			Nodo secondNode = firstNode.getDerecha();
-			Nodo thirdNode;
+	public void generateTree() {
+		while (this.first.getRight() != null) {
+			Node firstNode = this.first;
+			Node secondNode = firstNode.getRight();
+			Node thirdNode;
 			
-			if (secondNode.getDerecha() != null) {
-				thirdNode = secondNode.getDerecha();
+			if (secondNode.getRight() != null) {
+				thirdNode = secondNode.getRight();
 			} else {
 				thirdNode = null;
 			}
 			
-			firstNode.setIzquierda(null);
-			firstNode.setDerecha(null);
-			secondNode.setIzquierda(null);
-			secondNode.setDerecha(null);
+			firstNode.setLeft(null);
+			firstNode.setRight(null);
+			secondNode.setLeft(null);
+			secondNode.setRight(null);
 
-			Nodo rootNode = new Nodo(firstNode, secondNode, firstNode.getFrecuencia() + secondNode.getFrecuencia());
-			rootNode.setDerecha(thirdNode);
+			Node rootNode = new Node(firstNode, secondNode, firstNode.getFrequency() + secondNode.getFrequency());
+			rootNode.setRight(thirdNode);
 			if (thirdNode != null) {
-				thirdNode.setIzquierda(rootNode);
+				thirdNode.setLeft(rootNode);
 			}
-			this.primero = rootNode;
+			this.first = rootNode;
 
-			ordenar();
+			sort();
 		}
-		this.raizArbol = this.primero;
+		this.treeRoot = this.first;
 		
 	}
 
 
-	public Nodo ubicarNodo(Nodo miNodo, Nodo aux2) {
-		Nodo aux = aux2;
+	public Node nodePosition(Node newNode, Node aux2) {
+		Node aux = aux2;
 
 		while (aux != null) {
-			if (miNodo.getFrecuencia() <= aux.getFrecuencia()) {
-				aux.getIzquierda().setDerecha(miNodo);
-				miNodo.setIzquierda(aux.getIzquierda());
-				aux.setIzquierda(miNodo);
-				miNodo.setDerecha(aux);
-				return miNodo;
+			if (newNode.getFrequency() <= aux.getFrequency()) {
+				aux.getLeft().setRight(newNode);
+				newNode.setLeft(aux.getLeft());
+				aux.setLeft(newNode);
+				newNode.setRight(aux);
+				return newNode;
 			}
-			if (aux.getDerecha() == null) {
-				aux.setDerecha(miNodo);
-				miNodo.setIzquierda(aux);
+			if (aux.getRight() == null) {
+				aux.setRight(newNode);
+				newNode.setLeft(aux);
 				break;
 			}
-			aux = aux.getDerecha();
+			aux = aux.getRight();
 		}
-		return miNodo;
+		return newNode;
 	}
 
 
-	public void generarListaCodigo(Nodo miNodo, String cadena) {
-		if (miNodo != null) {
-			if (miNodo.isHoja()) {
-				if (cadena.isEmpty()) { // En el caso de que haya un solo nodo en el �rbol
-					listaCodigos[cont] = "0";
+	public void generateCodeList(Node newNode, String string) {
+		if (newNode != null) {
+			if (newNode.isLeaf()) {
+				if (string.isEmpty()) { // En el caso de que haya un solo nodo en el �rbol
+					codeList[iter] = "0";
 				} else {
-					listaCodigos[cont] = cadena;
+					codeList[iter] = string;
 				}
-				tabla[cont] = (byte) miNodo.getLetra();
-				cont++;
+				table[iter] = (byte) newNode.getCharacter();
+				iter++;
 			}
-			generarListaCodigo(miNodo.getHijoIzq(), cadena + "0");
-			generarListaCodigo(miNodo.getHijoDer(), cadena + "1");
+			generateCodeList(newNode.getLeftChild(), string + "0");
+			generateCodeList(newNode.getRightChild(), string + "1");
 		}
 	}
 
 
-	public void generarHuffman(int tabla[]) {
-		for (int i = 0; i < tabla.length; i++) {
-			if (tabla[i] != 0) {
-				System.out.println("Añadido: " + (char) i + " Freq: " + tabla[i]);
-				Nodo aux = new Nodo((char) i, tabla[i], true);
-				agregarElemento(aux);
+	public void generateHuffman(int table[]) {
+		for (int i = 0; i < table.length; i++) {
+			if (table[i] != 0) {
+				Node aux = new Node((char) i, table[i], true);
+				addElement(aux);
 			}
 		}
-		ordenar();
-		this.imprimirLista(this.primero);
-		generarArbol();
-		this.tabla = new byte[tamano];
-		listaCodigos = new String[tamano];
-		generarListaCodigo(raizArbol, "");
+		sort();
+		System.out.println("\nList of characters:");
+		this.printList(this.first);
+		generateTree();
+		this.table = new byte[size];
+		codeList = new String[size];
+		generateCodeList(treeRoot, "");
 	}
 
 
-	public String getCodigo(byte valor) {
-		for (int i = 0; i < tamano; i++)
-			if (tabla[i] == valor)
-				return listaCodigos[i];
+	public String getCode(byte value) {
+		for (int i = 0; i < size; i++)
+			if (table[i] == value)
+				return codeList[i];
 		return null;
 	}
 
 
-	public String getCodigo(int i) {
-		if ((i >= 0) && (i < tamano))
-			return listaCodigos[i];
+	public String getCode(int i) {
+		if ((i >= 0) && (i < size))
+			return codeList[i];
 		else
 			return null;
 
 	}
 
 
-	public String getCodigo(String st) {
-		String stCodificada = "";
-		if (st != null) {
-			for (int i = 0; i < st.length(); i++) {
-				byte valor = (byte) st.charAt(i);
-				String codigo = getCodigo(valor);
-				if (codigo != null) {
-					stCodificada += codigo;
+	public String getCode(String string) {
+		String encodedString = "";
+		if (string != null) {
+			for (int i = 0; i < string.length(); i++) {
+				byte value = (byte) string.charAt(i);
+				String code = getCode(value);
+				if (code != null) {
+					encodedString += code;
 				} else {
-					stCodificada += "_"; // Error, codigo inexistente
+					encodedString += "_"; // Error, codigo inexistente
 				}
 			}
 		}
-		return stCodificada;
+		return encodedString;
 	}
 
 
-	public byte[] getTabla() {
-		return tabla;
+	public byte[] getTable() {
+		return table;
 	}
 
 
-	public int getTamano() {
-		return tamano;
+	public int getSize() {
+		return size;
 	}
 
 
-	protected void imprimirArbol(Nodo nodo, String offset) {
-		if (nodo != null) {
-			System.out.println(offset + nodo);
-			imprimirArbol(nodo.getHijoIzq(), offset + "|   ");
-			imprimirArbol(nodo.getHijoDer(), offset + "|   ");
+	protected void printTree(Node node, String offset) {
+		if (node != null) {
+			System.out.println(offset + node);
+			printTree(node.getLeftChild(), offset + "|    ");
+			printTree(node.getRightChild(), offset + "|    ");
 		}
 	}
 
 
-	protected void imprimirLista(Nodo nodo) {
-		if (nodo != null) {
-			System.out.println(nodo);
-			imprimirLista(nodo.getDerecha());
+	protected void printList(Node node) {
+		if (node != null) {
+			System.out.println(" - " + node);
+			printList(node.getRight());
 		}
 	}
 
 
-	protected void imprimirListaCodigos() {
-		if (listaCodigos != null) {
-			for (int i = 0; i < listaCodigos.length; i++) {
-				System.out
-						.println("simbolo = <" + (char) tabla[i] + "> codigo = " + listaCodigos[i]);
+	protected void printCodeList() {
+		System.out.println("\nCode list:");
+		if (codeList != null) {
+			for (int i = 0; i < codeList.length; i++) {
+				System.out.println(" - Character: [" + (char)table[i] + "] Code: [" + codeList[i] + "]");
 			}
 		}
 	}
