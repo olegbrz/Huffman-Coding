@@ -20,7 +20,7 @@ public class Compressor {
 		String temp = "", buffer = "", code = "";
 		int readByte = 0, size, codePart;
 		byte tempTable[];
-		HuffmanAbstract newHuffman = new Huffman();
+		Huffman newHuffman = new Huffman();
 		FileInputStream reader;
 		FileOutputStream writer;
 
